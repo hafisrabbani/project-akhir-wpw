@@ -99,3 +99,17 @@ if (!function_exists('session')) {
         return new \App\Helpers\Session();
     }
 }
+
+if (!function_exists('respons')) {
+    function respons()
+    {
+        return new \App\Helpers\Response();
+    }
+}
+
+if (!function_exists('validate')) {
+    function validate()
+    {
+        return new \App\Helpers\Validator();
+    }
+}

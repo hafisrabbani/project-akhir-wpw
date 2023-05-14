@@ -29,6 +29,12 @@
                                 class="img-fluid" alt="Logo"></a>
                     </div>
                     <h1 class="auth-title">Log in.</h1>
+                    @if (session()->has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Whoops!</strong> {{ session()->get('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @endif
                     <form action="{{ route('login.post') }}" method="POST">
                         <div class="form-group position-relative has-icon-left mb-4">
                             <input type="text" class="form-control form-control-xl" placeholder="email" name="email">

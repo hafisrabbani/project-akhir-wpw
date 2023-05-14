@@ -90,10 +90,8 @@ Data Mahasiswa
                                 <td>{{ $mhs->roles->role_name }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" type="button"
-                                        onclick="showPanel('{{ $mhs->id }}','edit')"><i class="fas fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-success" type="button"
-                                        onclick="showPanel('{{ $mhs->id }}','detail')"><i
-                                            class="fas fa-eye"></i></button>
+                                        onclick="showPanel('{{ $mhs->user_id }}','edit')"><i
+                                            class="fas fa-pen"></i></button>
                                     <button class="btn btn-sm btn-danger" type="button"
                                         onclick="deleteData('{{ $mhs->id }}')"><i class="fas fa-trash"></i></button>
                                 </td>
@@ -107,87 +105,47 @@ Data Mahasiswa
     </div>
 </section>
 
-<section id="panel" class="panel">
-    <button class="btn btn-sm btn-danger closePanel" onclick="closePanel()"><i class="fas fa-times"></i></button>
-    <div class="row">
-        <div class="col-md-6">
-            <form id="edit">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title" id="panel-title">Detail Mahasiswa</h4>
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" class="form-control form-control-sm" id="name" name="name">
                     </div>
-
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" name="nama" id="nama" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nrp</label>
-                                    <input type="text" name="nrp" id="nrp" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Prodi</label>
-                                    <input type="text" name="prodi" id="prodi" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Alamat</label>
-                                    <input type="text" name="alamat" id="alamat" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Hobi</label>
-                                    <input type="text" name="hobi" id="hobi" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Ukm</label>
-                                    <input type="text" name="ukm" id="ukm" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Gender</label>
-                                    <select name="gender" id="gender" class="form-control">
-                                        <option value="" disabled>-- Pilih Gender --</option>
-                                        <option value="L">Laki-laki</option>
-                                        <option value="P">Perempuan</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" name="email" id="email" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="foto" class="form-label">Foto</label>
-                                    <input class="form-control" type="file" id="foto" name="foto">
-                                </div>
-                                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control form-control-sm" id="email" name="email">
                     </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6 text-center">
-            <div class="card">
-                <div class="card-header">
-                    Foto Mahasiswa
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <img src="{{ asset('assets/img/undraw_profile.svg') }}" alt="" class="img-fluid"
-                                id="foto-preview">
-                            <br>
-                            <button class="btn btn-sm btn-primary mt-4" type="button" id="download"><i
-                                    class="fas fa-download"></i> Download</button>
-                        </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control form-control-sm" id="password" name="password">
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="role">
+                            <option disabled>Pilih Role</option>
+                            @foreach ($roles as $role)
+                            <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
-</section>
+    </div>
+</div>
+<!-- End Modal -->
 @endsection
 @section('js')
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"
@@ -195,189 +153,82 @@ Data Mahasiswa
     </script>
 <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
     $(document).ready(function () {
         $('#table').DataTable();
     });
 
     function showPanel(id, type) {
-        $('#panel').addClass('active');
+        $('#name').val('');
+        $('#email').val('');
+        $('#password').val('');
+        $('#role').val('').change();
 
-        if (type != 'create') {
-            $.ajax({
-                method: 'GET',
-                url: '{{ route("admin.data-mahasiswa.get", ["id" => ""]) }}' + id,
-                success: function (response) {
-                    var resp = JSON.parse(response);
-                    $('#nama').val(resp.nama);
-                    $('#nrp').val(resp.nrp);
-                    $('#prodi').val(resp.prodi);
-                    $('#alamat').val(resp.alamat);
-                    $('#hobi').val(resp.hobi);
-                    $('#ukm').val(resp.ukm);
-                    $('#gender').val(resp.gender);
-                    $('#email').val(resp.email);
-                    $('#foto-preview').attr('src', '{{ asset("uploads/") }}' + resp.foto);
-                }
-            })
-            if (type == 'edit') {
-                $('#panel-title').html('Edit Mahasiswa');
-                $('#submit').html('Edit');
-                $('#edit').attr('action', '{{ route("admin.data-mahasiswa.update", ["id" => ""]) }}' + id);
-                $('#edit').append('<input type="hidden" name="id" value="' + id + '">');
-                $('#submit').attr('style', 'display:block');
-            } else {
-                $('#panel-title').html('Detail Mahasiswa');
-                $('#submit').attr('style', 'display:none');
-            }
-
-            $('#edit').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                console.log(formData);
-                $.ajax({
-                    method: 'POST',
-                    url: '{{ route("admin.data-mahasiswa.edit") }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        swal({
-                            title: "Berhasil!",
-                            text: "Data berhasil diubah!",
-                            icon: "success",
-                            button: "OK",
-                        }).then((value) => {
-                            location.reload();
-                        });
-                    },
-                    error: function (response) {
-                        swal({
-                            title: "Gagal!",
-                            text: "Data gagal diubah!",
-                            icon: "error",
-                            button: "OK",
-                        });
-                    },
-                    beforeSend: function () {
-                        swal({
-                            title: "Mohon Tunggu!",
-                            text: "Sedang memproses data!",
-                            icon: "info",
-                            button: false,
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        });
-                    },
-                })
-            })
-        } else {
-            $('#panel-title').html('Tambah Mahasiswa');
-            $('#submit').html('Tambah');
-            $('#edit').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                console.log(formData);
-                $.ajax({
-                    method: 'POST',
-                    url: '{{ route("admin.data-mahasiswa.create") }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        swal({
-                            title: "Berhasil!",
-                            text: "Data berhasil diubah!",
-                            icon: "success",
-                            button: "OK",
-                        }).then((value) => {
-                            location.reload();
-                        });
-                    },
-                    error: function (response) {
-                        swal({
-                            title: "Gagal!",
-                            text: "Data gagal diubah!",
-                            icon: "error",
-                            button: "OK",
-                        });
-                    },
-                    beforeSend: function () {
-                        swal({
-                            title: "Mohon Tunggu!",
-                            text: "Sedang memproses data!",
-                            icon: "info",
-                            button: false,
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        });
-                    },
-                })
-            })
+        if (type == 'create') {
+            $('#ModalLabel').html('Tambah Data');
+            $('#Modal').modal('show');
+            $('#userForm').attr('action', "{{ route('manage-user.post') }}");
+        } else if (type == 'edit') {
+            $('#ModalLabel').html('Edit Data');
+            $('#Modal').modal('show');
+            $('#userForm').attr('action', "{{ route('manage-user.edit.post',['id' => ':id']) }}".replace(':id', id));
+            getData(id, function (data) {
+                console.log(data);
+                $('#name').val(data.name);
+                $('#email').val(data.email);
+                $('label[for=password]').html('Password <small class="text-muted">(Kosongkan jika tidak ingin mengubah)</small > ');
+                $('#role').val(data.role_id).change();
+            });
         }
     }
 
-    function closePanel() {
-        $('#panel').removeClass('active');
-        $('#nama').val('');
-        $('#nrp').val('');
-        $('#prodi').val('');
-        $('#alamat').val('');
-        $('#hobi').val('');
-        $('#ukm').val('');
-        $('#gender').val('');
-        $('#email').val('');
-        $('#foto-preview').attr('src', '{{ asset("assets/img/undraw_profile.svg") }}');
-        // $('#edit').attr('action', '');
-        $('#edit').find('input[name="id"]').remove();
-    }
 
-    function deleteData(id) {
-        swal({
-            title: "Apakah anda yakin?",
-            text: "Data yang dihapus tidak dapat dikembalikan!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((value) => {
-            if (value) {
-                $.ajax({
-                    method: 'POST',
-                    url: '{{ route("admin.data-mahasiswa.delete") }}',
-                    data: {
-                        id: id,
-                    },
-                    success: function (response) {
-                        swal({
-                            title: "Berhasil!",
-                            text: "Data berhasil dihapus!",
-                            icon: "success",
-                            button: "OK",
-                        }).then((value) => {
-                            location.reload();
-                        });
-                    },
-                    error: function (response) {
-                        swal({
-                            title: "Gagal!",
-                            text: "Data gagal dihapus!",
-                            icon: "error",
-                            button: "OK",
-                        });
-                    },
-                    beforeSend: function () {
-                        swal({
-                            title: "Mohon Tunggu!",
-                            text: "Sedang memproses data!",
-                            icon: "info",
-                            button: false,
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        });
-                    },
-                })
+    function getData(id, callback) {
+        $.ajax({
+            url: "{{ route('manage-user.edit').':id' }}".replace(':id', id),
+            type: "GET",
+            dataType: "JSON",
+            success: function (data) {
+                callback(data);
+            },
+            beforeSend: function () {
+                $('#ModalLabel').html('Loading...');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                callback(null);
             }
         });
     }
+
+    $('#userForm').submit(function (e) {
+        e.preventDefault();
+
+        var data = $(this).serialize();
+        var url = $(this).attr('action');
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success: function (data) {
+                swal({
+                    title: "Berhasil!",
+                    text: "Data berhasil disimpan!",
+                    icon: "success",
+                    button: "OK",
+                }).then((value) => {
+                    location.reload();
+                });
+            },
+            error: function (err) {
+                swal({
+                    title: "Gagal!",
+                    text: err.responseJSON.message,
+                    icon: "error",
+                    button: "OK",
+                });
+            }
+        });
+    })
 </script>
 @endsection

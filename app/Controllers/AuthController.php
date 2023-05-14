@@ -15,15 +15,13 @@ class AuthController extends BaseController
         if ($rememberToken) {
             $user = User::where('remember_token', $rememberToken)->first();
             if (!$user) {
-                echo $this->view('login');
+                respons()->view('login');
             } else {
                 session()->put('admin', $user);
                 redirect(BASE_URL . Router::getUrl('dashboard'));
             }
-        } else {
-            echo "test";
         }
-        echo $this->view('login');
+        respons()->view('login');
     }
 
 
