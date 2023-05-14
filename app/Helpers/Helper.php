@@ -113,3 +113,11 @@ if (!function_exists('validate')) {
         return new \App\Helpers\Validator();
     }
 }
+
+if (!function_exists('dd')) {
+    function dd($data)
+    {
+        $obj = new \App\Helpers\Debug();
+        $obj->dd($data);
+    }
+}

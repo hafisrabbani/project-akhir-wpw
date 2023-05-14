@@ -2,6 +2,7 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
+use App\Controllers\DosenController;
 use App\Controllers\AdminController;
 use App\Filters\Roles;
 use Pecee\SimpleRouter\SimpleRouter as Route;
@@ -22,7 +23,10 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 
 
 /* Dosen Routing Here! */
-
+Route::get('dashboard/list-course', [DosenController::class, 'listCourse'])->name('list-course')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/{id}', [DosenController::class, 'listCourseDetail'])->name('list-course.detail')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/{id}/lesson', [DosenController::class, 'listCourseLesson'])->name('list-course.lesson')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/{id}/lesson/{lesson_id}', [DosenController::class, 'listCourseLessonDetail'])->name('list-course.lesson.detail')->addMiddleware(Roles::class);
 /* End Dosen Routing Here! */
 
 /*Admin Routing Here!*/

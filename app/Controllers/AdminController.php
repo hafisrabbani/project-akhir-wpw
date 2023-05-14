@@ -7,7 +7,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Enrollment;
 use App\Models\Course;
-// use App\Helpers\Response;
 
 class AdminController extends BaseController
 {
@@ -118,5 +117,116 @@ class AdminController extends BaseController
         ];
 
         respons()->view('main.courses', $data);
+    }
+
+    public function coursesPost()
+    {
+        $name = input()->post('name');
+        $description = input()->post('description');
+        $dosen = input()->post('dosen');
+
+        if (!$name || !$description || !$dosen) {
+            respons()->setStatusCode(400)->json(['message' => 'Data tidak lengkap']);
+            exit;
+        }
+
+        $data = Course::create([
+            'course_name' => $name,
+            'description' => $description,
+            'instructor_id' => $dosen
+        ]);
+
+        respons()->setStatusCode($data ? 200 : 400)->json($data ? ['message' => 'Berhasil menambahkan data'] : ['message' => 'Gagal menambahkan data']);
+    }
+
+    public function coursesEdit($id)
+    {
+        $data = Course::find($id);
+        if (!$data) {
+            respons()->setStatusCode(404)->json(['message' => 'Data tidak ditemukan']);
+        }
+
+        respons()->json($data);
+    }
+
+    public function coursesEditPost($id)
+    {
+        $name = input()->post('name');
+        $description = input()->post('description');
+        $dosen = input()->post('dosen');
+
+        if (!$name || !$description || !$dosen) {
+            respons()->setStatusCode(400)->json(['message' => 'Data tidak lengkap']);
+            exit;
+        }
+
+        $course = Course::find($id);
+        $update = $course->update([
+            'course_name' => $name,
+            'description' => $description,
+            'instructor_id' => $dosen
+        ]);
+
+        respons()->setStatusCode($update ? 200 : 400)->json($update ? ['message' => 'Berhasil mengubah data'] : ['message' => 'Gagal mengubah data']);
+    }
+
+    public function enrollment()
+    {
+        $data = [
+            'data' => Enrollment::all(),
+            'courses' => Course::all(),
+            'students' => User::whereHas('roles', function ($query) {
+                $query->where('role_name', '=', 'mahasiswa');
+            })->select(['user_id', 'name'])->get()
+        ];
+
+        respons()->view('main.enrollments', $data);
+    }
+
+    public function enrollmentPost()
+    {
+        $mahasiswa = input()->post('mahasiswa');
+        $matkul = input()->post('matkul');
+
+        if (!$mahasiswa || !$matkul) {
+            respons()->setStatusCode(400)->json(['message' => 'Data tidak lengkap']);
+            exit;
+        }
+
+        $data = Enrollment::create([
+            'user_id' => $mahasiswa,
+            'course_id' => $matkul
+        ]);
+
+        respons()->setStatusCode($data ? 200 : 400)->json($data ? ['message' => 'Berhasil menambahkan data'] : ['message' => 'Gagal menambahkan data']);
+    }
+
+    public function enrollmentEdit($id)
+    {
+        $data = Enrollment::find($id);
+        if (!$data) {
+            respons()->setStatusCode(404)->json(['message' => 'Data tidak ditemukan']);
+        }
+
+        respons()->json($data);
+    }
+
+    public function enrollmentEditPost($id)
+    {
+        $mahasiswa = input()->post('mahasiswa');
+        $matkul = input()->post('matkul');
+
+        if (!$mahasiswa || !$matkul) {
+            respons()->setStatusCode(400)->json(['message' => 'Data tidak lengkap']);
+            exit;
+        }
+
+        $enrollment = Enrollment::find($id);
+        $update = $enrollment->update([
+            'user_id' => $mahasiswa,
+            'course_id' => $matkul
+        ]);
+
+        respons()->setStatusCode($update ? 200 : 400)->json($update ? ['message' => 'Berhasil mengubah data'] : ['message' => 'Gagal mengubah data']);
     }
 }

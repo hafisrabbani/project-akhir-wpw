@@ -15,6 +15,25 @@
 <body>
     <div id="app">
         @include('main.master.sidebar')
+        <nav class="navbar navbar-expand-md bg-body-tertiary shadow-sm bg-body-tertiary rounded">
+            <div class=" container-fluid">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <p class="nav-link text-primary">
+                                <i class="fas fa-user"></i>
+                                {{ session()->get('user')->name }}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">

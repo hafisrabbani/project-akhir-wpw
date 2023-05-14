@@ -4,7 +4,6 @@ namespace App\Filters;
 
 use App\Filters\Filter;
 use Pecee\Http\Request;
-use App\Helpers\Session;
 
 class Roles implements Filter
 {

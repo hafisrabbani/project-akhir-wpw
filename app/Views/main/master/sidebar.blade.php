@@ -52,6 +52,10 @@
                     </a>
                 </li>
 
+                @if(session()->get('user')->role_id == 1)
+                @include('main.master.dosen-sidebar')
+                @endif
+
                 <!-- Admin Sidebar -->
                 @if(session()->get('user')->role_id == 3)
                 @include('main.master.admin-sidebar')

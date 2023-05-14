@@ -1,7 +1,7 @@
 @extends('main.master.main')
 
 @section('page-heading')
-Data Mata Kuliah
+Data Enrollments
 @endsection
 @section('css')
 <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
@@ -75,25 +75,24 @@ Data Mata Kuliah
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Mahasiswa</th>
                                 <th>Matkul</th>
-                                <th>Deskripsi</th>
-                                <th>Dosen</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $course)
+                            @foreach ($data as $enrollment)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $course->course_name }}</td>
-                                <td>{{ $course->description }}</td>
-                                <td>{{ $course->users->name }}</td>
+                                <td>{{ $enrollment->users->name }}</td>
+                                <td>{{ $enrollment->courses->course_name }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" type="button"
-                                        onclick="showPanel('{{ $course->course_id }}','edit')"><i
+                                        onclick="showPanel('{{ $enrollment->enrollment_id }}','edit')"><i
                                             class="fas fa-pen"></i></button>
                                     <button class="btn btn-sm btn-danger" type="button"
-                                        onclick="deleteData('{{ $course->id }}')"><i class="fas fa-trash"></i></button>
+                                        onclick="deleteData('{{ $enrollment->enrollment_id }}')"><i
+                                            class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -115,20 +114,22 @@ Data Mata Kuliah
             </div>
             <div class="modal-body">
                 <form id="userForm">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nama Mata Kuliah</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="form-group">
+                        <label for="name">Mahasiswa</label>
+                        <select class="form-control" id="mahasiswa" name="mahasiswa">
+                            <option value="">-- Pilih Mahasiswa --</option>
+                            @foreach ($students as $mhs)
+                            <option value="{{ $mhs->user_id }}">{{ $mhs->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Deskripsi</label>
-                        <input type="text" class="form-control" id="description" name="description" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Dosen</label>
-                        <select class="form-select" id="dosen" name="dosen" required>
-                            <option disabled>Pilih Dosen</option>
-                            @foreach ($dosen as $dosen)
-                            <option value="{{ $dosen->user_id }}">{{ $dosen->name }}</option>
+
+                    <div class="form-group">
+                        <label for="name">Matkul</label>
+                        <select class="form-control" id="matkul" name="matkul">
+                            <option value="">-- Pilih Matkul --</option>
+                            @foreach ($courses as $mat)
+                            <option value="{{ $mat->course_id }}">{{ $mat->course_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -156,24 +157,22 @@ Data Mata Kuliah
     });
 
     function showPanel(id, type) {
-        $('#name').val('');
-        $('#description').val('');
-        $('#dosen').val('').change();
+        $('#mahasiswa').val('').change();
+        $('#matkul').val('').change();
 
         if (type == 'create') {
             $('#ModalLabel').html('Tambah Data');
             $('#Modal').modal('show');
-            $('#userForm').attr('action', "{{ route('courses.post') }}");
+            $('#userForm').attr('action', "{{ route('enrollment.post') }}");
         } else if (type == 'edit') {
             $('#ModalLabel').html('Edit Data');
             $('#Modal').modal('show');
-            $('#userForm').attr('action', "{{ route('courses.edit.post',['id' => ':id']) }}".replace(':id', id));
+            $('#userForm').attr('action', "{{ route('enrollment.edit.post',['id' => ':id']) }}".replace(':id', id));
             getData(id, function (data) {
                 console.log(data);
                 $('#ModalLabel').html('Edit Data');
-                $('#name').val(data.course_name);
-                $('#description').val(data.description);
-                $('#dosen').val(data.instructor_id).change();
+                $('#mahasiswa').val(data.user_id).change();
+                $('#matkul').val(data.course_id).change();
             });
         }
     }
@@ -181,7 +180,7 @@ Data Mata Kuliah
 
     function getData(id, callback) {
         $.ajax({
-            url: "{{ route('courses.edit').':id' }}".replace(':id', id),
+            url: "{{ route('enrollment.edit').':id' }}".replace(':id', id),
             type: "GET",
             dataType: "JSON",
             success: function (data) {
