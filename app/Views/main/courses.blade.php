@@ -1,7 +1,7 @@
 @extends('main.master.main')
 
 @section('page-heading')
-Data Users
+Data Mata Kuliah
 @endsection
 @section('css')
 <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
@@ -75,19 +75,19 @@ Data Users
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Email</th>
-                                <th>Nama</th>
-                                <th>Role</th>
+                                <th>Matkul</th>
+                                <th>Deskripsi</th>
+                                <th>Dosen</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $mhs)
+                            @foreach ($data as $course)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $mhs->email }}</td>
-                                <td>{{ $mhs->name }}</td>
-                                <td>{{ $mhs->roles->role_name }}</td>
+                                <td>{{ $course->course_name }}</td>
+                                <td>{{ $course->description }}</td>
+                                <td>{{ $course->users->name }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" type="button"
                                         onclick="showPanel('{{ $mhs->user_id }}','edit')"><i
@@ -115,24 +115,20 @@ Data Users
             </div>
             <div class="modal-body">
                 <form id="userForm">
-                    <div class="form-group">
-                        <label for="name">Nama</label>
-                        <input type="text" class="form-control form-control-sm" id="name" name="name">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama Mata Kuliah</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control form-control-sm" id="email" name="email">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Deskripsi</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
                     </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control form-control-sm" id="password" name="password">
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
-                        <select class="form-control" id="role" name="role">
-                            <option disabled>Pilih Role</option>
-                            @foreach ($roles as $role)
-                            <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Dosen</label>
+                        <select class="form-select" id="dosen" name="dosen" required>
+                            <option disabled>Pilih Dosen</option>
+                            @foreach ($dosen as $dosen)
+                            <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
                             @endforeach
                         </select>
                     </div>

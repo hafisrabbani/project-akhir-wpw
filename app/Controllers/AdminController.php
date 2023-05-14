@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Helpers\Debug;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Enrollment;
+use App\Models\Course;
 // use App\Helpers\Response;
 
 class AdminController extends BaseController
@@ -91,5 +93,30 @@ class AdminController extends BaseController
         ]);
 
         respons()->setStatusCode($update ? 200 : 400)->json($update ? ['message' => 'Berhasil mengubah data'] : ['message' => 'Gagal mengubah data']);
+    }
+
+    public function manageUserDelete($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            respons()->setStatusCode(404)->json(['message' => 'Data tidak ditemukan']);
+        }
+
+        $delete = $user->delete();
+
+        respons()->setStatusCode($delete ? 200 : 400)->json($delete ? ['message' => 'Berhasil menghapus data'] : ['message' => 'Gagal menghapus data']);
+    }
+
+
+    public function courses()
+    {
+        $data = [
+            'data' => Course::all(),
+            'dosen' => User::whereHas('roles', function ($query) {
+                $query->where('role_name', 'dosen');
+            })->get()
+        ];
+
+        respons()->view('main.courses', $data);
     }
 }

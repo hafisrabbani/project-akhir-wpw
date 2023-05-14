@@ -28,6 +28,18 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 /*Admin Routing Here!*/
 Route::get('dashboard/manage-user', [AdminController::class, 'manageUser'])->name('manage-user')->addMiddleware(Roles::class);
 Route::post('dashboard/manage-user', [AdminController::class, 'manageUserPost'])->name('manage-user.post')->addMiddleware(Roles::class);
-Route::get('dashboard/manage-user/delete/{id}', [AdminController::class, 'manageUserDelete'])->name('manage-user.delete')->addMiddleware(Roles::class);
+Route::post('dashboard/manage-user/delete/{id}', [AdminController::class, 'manageUserDelete'])->name('manage-user.delete')->addMiddleware(Roles::class);
 Route::get('dashboard/manage-user/edit/{id}', [AdminController::class, 'manageUserEdit'])->name('manage-user.edit')->addMiddleware(Roles::class);
 Route::post('dashboard/manage-user/edit/{id}', [AdminController::class, 'manageUserEditPost'])->name('manage-user.edit.post')->addMiddleware(Roles::class);
+
+Route::get('dashboard/enrollment', [AdminController::class, 'enrollment'])->name('enrollment')->addMiddleware(Roles::class);
+Route::post('dashboard/enrollment', [AdminController::class, 'enrollmentPost'])->name('enrollment.post')->addMiddleware(Roles::class);
+Route::get('dashboard/enrollment/delete/{id}', [AdminController::class, 'enrollmentDelete'])->name('enrollment.delete')->addMiddleware(Roles::class);
+Route::get('dashboard/enrollment/edit/{id}', [AdminController::class, 'enrollmentEdit'])->name('enrollment.edit')->addMiddleware(Roles::class);
+Route::post('dashboard/enrollment/edit/{id}', [AdminController::class, 'enrollmentEditPost'])->name('enrollment.edit.post')->addMiddleware(Roles::class);
+
+Route::get('dashboard/courses', [AdminController::class, 'courses'])->name('courses')->addMiddleware(Roles::class);
+Route::post('dashboard/courses', [AdminController::class, 'coursesPost'])->name('courses.post')->addMiddleware(Roles::class);
+Route::get('dashboard/courses/delete/{id}', [AdminController::class, 'coursesDelete'])->name('courses.delete')->addMiddleware(Roles::class);
+Route::get('dashboard/courses/edit/{id}', [AdminController::class, 'coursesEdit'])->name('courses.edit')->addMiddleware(Roles::class);
+Route::post('dashboard/courses/edit/{id}', [AdminController::class, 'coursesEditPost'])->name('courses.edit.post')->addMiddleware(Roles::class);

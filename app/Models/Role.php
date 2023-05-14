@@ -9,6 +9,6 @@ class Role extends Model
     protected $primaryKey = 'role_id';
     public function users()
     {
-        return $this->hasMany(User::class, 'user_id');
+        return $this->hasMany(User::class);
     }
 }

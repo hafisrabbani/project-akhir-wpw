@@ -45,32 +45,6 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu </li>
-                <!-- @if(session()->get('user')->role_id == 1 || session()->get('user')->role_id == 3)
-                <li class="sidebar-item {{ ($_SERVER['REQUEST_URI'] == '/admin/dashboard/') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                @endif -->
-                <!-- <li class="sidebar-item {{ ($_SERVER['REQUEST_URI'] == '/admin/dashboard/') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ ($_SERVER['REQUEST_URI'] == '/dashboard/manage-user') ? 'active' : '' }}">
-                    <a href="{{ route('admin.data-mahasiswa') }}" class='sidebar-link'>
-                        <i class="fas fa-users"></i>
-                        <span>Data Mahasiswa</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href=" {{ route('logout') }}" class='sidebar-link'>
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Log Out</span>
-                    </a>
-                </li> -->
                 <li class="sidebar-item {{ ($_SERVER['REQUEST_URI'] == '/dashboard/') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
