@@ -26,6 +26,7 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::get('dashboard/list-course', [DosenController::class, 'listCourse'])->name('list-course')->addMiddleware(Roles::class);
 Route::get('dashboard/list-course/{id}', [DosenController::class, 'listCourseDetail'])->name('list-course.detail')->addMiddleware(Roles::class);
 Route::get('dashboard/list-course/{id}/lesson', [DosenController::class, 'listCourseLesson'])->name('list-course.lesson')->addMiddleware(Roles::class);
+Route::post('dashboard/list-course/{id}/lesson', [DosenController::class, 'lessonCreate'])->name('list-course.lesson.post')->addMiddleware(Roles::class);
 Route::get('dashboard/list-course/{id}/lesson/{lesson_id}', [DosenController::class, 'listCourseLessonDetail'])->name('list-course.lesson.detail')->addMiddleware(Roles::class);
 /* End Dosen Routing Here! */
 

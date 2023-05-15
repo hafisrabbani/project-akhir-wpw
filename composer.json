@@ -18,8 +18,8 @@
     },
     "require": {
         "eftec/bladeone": "dev-master",
-        "illuminate/database": "11.x-dev",
-        "illuminate/http": "11.x-dev",
+        "illuminate/database": "10.10",
+        "illuminate/http": "10.x-dev",
         "pecee/simple-router": "dev-master"
     },
     "scripts": {
