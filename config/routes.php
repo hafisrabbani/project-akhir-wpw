@@ -4,6 +4,7 @@ use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\DosenController;
 use App\Controllers\AdminController;
+use App\Controllers\MahasiswaController;
 use App\Filters\Roles;
 use Pecee\SimpleRouter\SimpleRouter as Route;
 
@@ -19,15 +20,27 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 
 
 /* Mahasiswa Routing Here! */
+Route::get('dashboard/mhs/list-course', [MahasiswaController::class, 'listCourse'])->name('mhs.list-course')->addMiddleware(Roles::class);
+Route::get('dashboard/mhs/list-course/lesson/{id}', [MahasiswaController::class, 'listLesson'])->name('mhs.list-lesson')->addMiddleware(Roles::class);
 /* End Mahasiswa Routing Here! */
 
 
 /* Dosen Routing Here! */
 Route::get('dashboard/list-course', [DosenController::class, 'listCourse'])->name('list-course')->addMiddleware(Roles::class);
 Route::get('dashboard/list-course/{id}', [DosenController::class, 'listCourseDetail'])->name('list-course.detail')->addMiddleware(Roles::class);
+// Lesson Routes
 Route::get('dashboard/list-course/{id}/lesson', [DosenController::class, 'listCourseLesson'])->name('list-course.lesson')->addMiddleware(Roles::class);
 Route::post('dashboard/list-course/{id}/lesson', [DosenController::class, 'lessonCreate'])->name('list-course.lesson.post')->addMiddleware(Roles::class);
-Route::get('dashboard/list-course/{id}/lesson/{lesson_id}', [DosenController::class, 'listCourseLessonDetail'])->name('list-course.lesson.detail')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/lesson/{lesson_id}', [DosenController::class, 'listCourseLessonDetail'])->name('list-course.lesson.detail')->addMiddleware(Roles::class);
+Route::post('dashboard/list-course/lesson/{lesson_id}', [DosenController::class, 'listCourseLessonUpdate'])->name('list-course.lesson.detail.update')->addMiddleware(Roles::class);
+Route::get('dashboard/lesson/delete/{id}', [DosenController::class, 'lessonDelete'])->name('lesson.delete')->addMiddleware(Roles::class);
+Route::get('/dasboard/lesson/list-mahasiswa/{id}', [DosenController::class, 'listMhs'])->name('course.mhs')->addMiddleware(Roles::class);
+// Assignment Routes
+Route::get('dashboard/list-course/assignment/{id}', [DosenController::class, 'assignmentList'])->name('assignment.list')->addMiddleware(Roles::class);
+Route::post('dashboard/list-course/{id}/assignment/create', [DosenController::class, 'assignmentPost'])->name('assignment.create')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/assignment/{id}/detail', [DosenController::class, 'assignmentDetail'])->name('assignment.detail')->addMiddleware(Roles::class);
+Route::post('dashbord/list-course/assignment/{id}/update', [DosenController::class, 'assignmentUpdate'])->name('assignment.update')->addMiddleware(Roles::class);
+Route::get('dashborad/list-course/assginment/{id}/delete', [DosenController::class, 'assignmentDelete'])->name('assignment.delete')->addMiddleware(Roles::class);
 /* End Dosen Routing Here! */
 
 /*Admin Routing Here!*/

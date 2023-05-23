@@ -1,34 +1,37 @@
 @extends('main.master.main')
 
 @section('page-heading')
-    List Materi
+    List Tugas
 @endsection
 
 @section('page-content')
     <section class="row">
         <div class="col-12">
             <button class="btn btn-sm btn-primary mb-3" type="button" onclick="showPanel('','create')"><i
-                    class="fas fa-plus"></i> Materi</button>
+                    class="fas fa-plus"></i> Tugas</button>
             <div class="row">
-                @foreach ($lessons as $val)
-                    <div class="col-6 col-lg-3 col-md-6">
+                @foreach ($data as $val)
+                    <div class="col-6 col-md-6">
                         <div class="card">
                             <div class="card-body px-4 py-4-5">
                                 <div class="row">
-                                    <div class="col-md-3 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                    <div class="col-md-2 d-flex justify-content-start ">
                                         <div class="stats-icon purple mb-2">
-                                            <img src="https://ui-avatars.com/api/?name={{ $val->lesson_name }}&color=ffffff&background=9694ff"
-                                                alt="avatar" class="img-fluid rounded shadow-sm" />
+                                            <img src="https://ui-avatars.com/api/?name={{ $val->assignment_name }}&color=ffffff&background=9694ff"
+                                                alt="avatar" class="rounded shadow-sm"
+                                                style="width: 550px !important; height: auto;" />
                                         </div>
                                     </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h5 class="text-muted mb-1">{{ $val->lesson_name }} </h5>
-                                        <p class="mb-0 text-sm"><small>{{ $val->content }}</small></p>
+                                    <div class="col-md-8">
+                                        <h5 class="text-muted mb-1">{{ $val->assignment_name }} </h5>
+                                        <p class="mb-0 text-sm"><small>{{ $val->description }}</small></p>
+                                        <span class="badge text-bg-primary mb-1">{{ $val->deadline }}</span>
+                                        <br>
                                         <button class="btn btn-sm btn-primary" type="button"
-                                            onclick="showPanel('{{ $val->lesson_id }}','edit')"><i
+                                            onclick="showPanel('{{ $val->assignment_id }}','edit')"><i
                                                 class="fas fa-pen"></i></button>
                                         <button class="btn btn-sm btn-danger" type="button"
-                                            onclick="deleteData('{{ $val->lesson_id }}')"><i
+                                            onclick="deleteData('{{ $val->assignment_id }}')"><i
                                                 class="fas fa-trash"></i></button>
                                     </div>
                                 </div>
@@ -51,12 +54,16 @@
                 <div class="modal-body">
                     <form id="userForm">
                         <div class="mb-3">
-                            <label for="judul" class="form-label">Judul Materi</label>
-                            <input type="text" class="form-control" id="judul" name="judul" required>
+                            <label for="name" class="form-label">Nama Tugas</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="content" class="form-label">content</label>
-                            <textarea class="form-control" id="content" name="content" required cols="30" rows="6"></textarea>
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" required cols="30" rows="6"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deadline" class="form-label">Deadline</label>
+                            <input type="datetime-local" class="form-control" name="deadline" id="deadline">
                         </div>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </form>
@@ -76,25 +83,24 @@
 
     <script>
         function showPanel(id, type) {
-            $('#judul').val();
-            $('#content').val('');
-
+            $('#name').val('');
+            $('#description').val('');
+            $('#deadline').val('');
             if (type == 'create') {
                 $('#ModalLabel').html('Tambah Data');
                 $('#Modal').modal('show');
-                $('#userForm').attr('action', "{{ route('list-course.lesson.post', ['id' => $id_course]) }}");
+                $('#userForm').attr('action', "{{ route('assignment.create', ['id' => $id_course]) }}");
             } else if (type == 'edit') {
                 $('#ModalLabel').html('Edit Data');
                 $('#Modal').modal('show');
-                $('#userForm').attr('action', "{{ route('list-course.lesson.detail.update', ['lesson_id' => ':id']) }}"
+                $('#userForm').attr('action', "{{ route('assignment.update', ['id' => $id_course]) }}"
                     .replace(':id', id))
-                // alert(id);  
                 getData(id, function(data) {
                     console.log(data);
                     $('#ModalLabel').html('Edit Data');
-                    $('#judul').val(data.lesson_name);
-                    $('#content').val(data.content);
-                    $('#dosen').val(data.instructor_id).change();
+                    $('#name').val(data.assignment_name);
+                    $('#description').val(data.description);
+                    $('#deadline').val(data.deadline);
                 });
             }
         }
@@ -102,7 +108,7 @@
 
         function getData(id, callback) {
             $.ajax({
-                url: "{{ route('list-course.lesson.detail') . ':id' }}".replace(':id', id),
+                url: "{{ route('assignment.detail', ['id' => ':id']) }}".replace(':id', id),
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
@@ -157,7 +163,7 @@
             }).then((value) => {
                 if (value) {
                     $.ajax({
-                        url: "{{ route('lesson.delete', ['id' => ':id']) }}".replace(':id', id),
+                        url: "{{ route('assignment.delete', ['id' => ':id']) }}".replace(':id', id),
                         type: "GET",
                         success: function(data) {
                             swal({

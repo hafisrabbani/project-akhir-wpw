@@ -11,7 +11,7 @@ class Roles implements Filter
     {
         require_once __DIR__ . '/../Helpers/Helper.php';
         if (!session()->has('user')) {
-            redirect(BASE_URL . '/login');
+            redirect(BASE_URL . '/');
         }
     }
 }
