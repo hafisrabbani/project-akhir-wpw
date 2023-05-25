@@ -6,6 +6,7 @@ use App\Controllers\DosenController;
 use App\Controllers\AdminController;
 use App\Controllers\MahasiswaController;
 use App\Filters\Roles;
+use App\Models\Role;
 use Pecee\SimpleRouter\SimpleRouter as Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -22,6 +23,8 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 /* Mahasiswa Routing Here! */
 Route::get('dashboard/mhs/list-course', [MahasiswaController::class, 'listCourse'])->name('mhs.list-course')->addMiddleware(Roles::class);
 Route::get('dashboard/mhs/list-course/lesson/{id}', [MahasiswaController::class, 'listLesson'])->name('mhs.list-lesson')->addMiddleware(Roles::class);
+Route::get('dashboard/mhs/list-course/assignment/{id}', [MahasiswaController::class, 'listAssignment'])->name('mhs.list-assignment')->addMiddleware(Roles::class);
+Route::post('dashboard/mhs/list-course/assignment/{id}/upload', [MahasiswaController::class, 'assignmentPost'])->name('mhs.assignment.post')->addMiddleware(Roles::class);
 /* End Mahasiswa Routing Here! */
 
 

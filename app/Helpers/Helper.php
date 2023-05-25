@@ -121,3 +121,17 @@ if (!function_exists('dd')) {
         $obj->dd($data);
     }
 }
+
+if (!function_exists('public_path')) {
+    function public_path()
+    {
+        return BASE_PATH . 'public/';
+    }
+}
+
+if (!function_exists('fileHandler')) {
+    function fileHandler()
+    {
+        return new \App\Helpers\FileHandler();
+    }
+}

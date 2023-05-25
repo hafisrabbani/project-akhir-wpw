@@ -30,7 +30,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <a class="btn btn-info mb-2"
-                                            href="{{ route('assignment.list', ['id' => $course->course_id]) }}"
+                                            href="{{ route('mhs.list-assignment', ['id' => $course->course_id]) }}"
                                             style="width: 100%;" type="button"><small><i
                                                     class="fas fa-tasks"></i></small></a>
                                     </div>

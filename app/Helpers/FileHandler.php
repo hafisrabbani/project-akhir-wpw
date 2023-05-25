@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Exception;
+
 class FileHandler
 {
     public function upload($inputName, $destination, $allowedExtensions = [], $maxSize = 2048)
@@ -24,13 +26,16 @@ class FileHandler
         if (!empty($allowedExtensions) && !in_array($fileExt, $allowedExtensions)) {
             throw new Exception("File extension not allowed");
         }
-
-        $targetPath = rtrim($destination, '/') . '/' . uniqid() . '.' . $fileExt;
+        $fileName = uniqid() . '.' . $fileExt;
+        $targetPath = rtrim($destination, '/') . '/' . $fileName;
         if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
             throw new Exception("File upload failed");
         }
 
-        return $targetPath;
+        return [
+            'path' => $targetPath,
+            'file_name' => $fileName
+        ];
     }
 
     public function validateUpload($inputName, $allowedExtensions = [], $maxSize = 2048)
