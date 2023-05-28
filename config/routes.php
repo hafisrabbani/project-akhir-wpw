@@ -44,6 +44,8 @@ Route::post('dashboard/list-course/{id}/assignment/create', [DosenController::cl
 Route::get('dashboard/list-course/assignment/{id}/detail', [DosenController::class, 'assignmentDetail'])->name('assignment.detail')->addMiddleware(Roles::class);
 Route::post('dashbord/list-course/assignment/{id}/update', [DosenController::class, 'assignmentUpdate'])->name('assignment.update')->addMiddleware(Roles::class);
 Route::get('dashborad/list-course/assginment/{id}/delete', [DosenController::class, 'assignmentDelete'])->name('assignment.delete')->addMiddleware(Roles::class);
+Route::get('dashboard/list-course/assignment/{id}/submission', [DosenController::class, 'assignmentSubmission'])->name('assignment.submission')->addMiddleware(Roles::class);
+Route::post('dashboard/list-course/assignment/submission/{id}', [DosenController::class, 'assignmentSubmissionPost'])->name('assignment.submission.post')->addMiddleware(Roles::class);
 /* End Dosen Routing Here! */
 
 /*Admin Routing Here!*/

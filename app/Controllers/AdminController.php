@@ -28,6 +28,7 @@ class AdminController extends BaseController
     {
         $name = input()->post('name');
         $email = input()->post('email');
+        $nrp = input()->post('nrp') ?? null;
         $role = input()->post('role');
         $password = input()->post('password');
 
@@ -41,8 +42,14 @@ class AdminController extends BaseController
             exit;
         }
 
+        if ($nrp && User::where('nrp', $nrp)->first()) {
+            respons()->setStatusCode(400)->json(['message' => 'NRP sudah terdaftar']);
+            exit;
+        }
+
         $data = User::create([
             'name' => $name,
+            'nrp' => $nrp,
             'email' => $email,
             'role_id' => $role,
             'password' => password_hash($password, PASSWORD_DEFAULT)
@@ -53,7 +60,7 @@ class AdminController extends BaseController
 
     public function manageUserEdit($id)
     {
-        $data = User::select(['user_id', 'name', 'email', 'role_id'])
+        $data = User::select(['user_id', 'name', 'email', 'role_id', 'nrp'])
             ->where('user_id', $id)
             ->with('roles', function ($query) {
                 $query->select(['role_id', 'role_name']);
@@ -71,6 +78,7 @@ class AdminController extends BaseController
         $name = input()->post('name');
         $email = input()->post('email');
         $role = input()->post('role');
+        $nrp = input()->post('nrp');
         $password = input()->post('password');
 
         if (!$name || !$email || !$role) {
@@ -83,10 +91,17 @@ class AdminController extends BaseController
             exit;
         }
 
+        $nrp = $nrp ? $nrp : null;
+        if ($nrp && User::where('nrp', $nrp)->where('user_id', '!=', $id)->first()) {
+            respons()->setStatusCode(400)->json(['message' => 'NRP sudah terdaftar']);
+            exit;
+        }
+
         $user = User::find($id);
         $update = $user->update([
             'name' => $name,
             'email' => $email,
+            'nrp' => $nrp,
             'role_id' => $role,
             'password' => $password ? password_hash($password, PASSWORD_DEFAULT) : $user->password
         ]);

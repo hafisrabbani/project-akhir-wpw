@@ -17,10 +17,6 @@ class FileHandler
         $fileType = $file['type'];
         $fileSize = $file['size'];
 
-        if ($fileSize > $maxSize * 1024) {
-            throw new Exception("File size exceeds the limit");
-        }
-
         $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         if (!empty($allowedExtensions) && !in_array($fileExt, $allowedExtensions)) {
@@ -36,6 +32,17 @@ class FileHandler
             'path' => $targetPath,
             'file_name' => $fileName
         ];
+    }
+
+    public function download($path)
+    {
+        if (!file_exists($path)) {
+            throw new Exception("File not found");
+        }
+        $fileName = public_path() . $path;
+        header("Content-Type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=$fileName");
+        readfile($path);
     }
 
     public function validateUpload($inputName, $allowedExtensions = [], $maxSize = 2048)

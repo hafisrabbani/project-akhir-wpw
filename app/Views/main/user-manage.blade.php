@@ -116,6 +116,10 @@ Data Users
             <div class="modal-body">
                 <form id="userForm">
                     <div class="form-group">
+                        <label for="nrp">Nrp</label>
+                        <input type="number" name="nrp" id="nrp" class="form-control form-control-sm">
+                    </div>
+                    <div class=" form-group">
                         <label for="name">Nama</label>
                         <input type="text" class="form-control form-control-sm" id="name" name="name">
                     </div>
@@ -164,7 +168,7 @@ Data Users
         $('#email').val('');
         $('#password').val('');
         $('#role').val('').change();
-
+        $('#nrp').val('');
         if (type == 'create') {
             $('#ModalLabel').html('Tambah Data');
             $('#Modal').modal('show');
@@ -175,6 +179,7 @@ Data Users
             $('#userForm').attr('action', "{{ route('manage-user.edit.post',['id' => ':id']) }}".replace(':id', id));
             getData(id, function (data) {
                 console.log(data);
+                $('#nrp').val(data.nrp);
                 $('#name').val(data.name);
                 $('#email').val(data.email);
                 $('label[for=password]').html('Password <small class="text-muted">(Kosongkan jika tidak ingin mengubah)</small > ');

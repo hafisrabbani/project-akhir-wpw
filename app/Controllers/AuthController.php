@@ -31,6 +31,7 @@ class AuthController extends BaseController
         $password = input()->post('password');
         $remember = input()->post('remember');
         $user = User::where('email', $email)->first();
+        // dd($user);
         if ($user) {
             if (password_verify($password, $user->password)) {
                 if ($remember) {

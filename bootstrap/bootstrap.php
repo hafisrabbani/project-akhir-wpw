@@ -5,9 +5,13 @@ define('APP_PATH', BASE_PATH . '/app');
 require_once BASE_PATH . '/vendor/autoload.php';
 require APP_PATH . '/Helpers/Env.php';
 
+
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Exceptions\Handler;
 use App\Helpers\Env;
+
+
 
 $protocol = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
@@ -20,6 +24,10 @@ $blade = new \eftec\bladeone\BladeOne(
     $viewConfig['mode']
 );
 
+
+// Set Timezone
+$timezoneConfig = require_once BASE_PATH . '/config/timezone.php';
+date_default_timezone_set($timezoneConfig['timezone']);
 
 $capsule = new Capsule;
 $dbConfig = require_once BASE_PATH . '/config/database.php';

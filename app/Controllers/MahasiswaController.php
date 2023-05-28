@@ -41,8 +41,18 @@ class MahasiswaController extends BaseController
                 ->where('submissions.user_id', '=', $userId);
         })
             ->where('assignments.course_id', $id)
-            ->select('assignments.*', 'submissions.submission_id as submission_id', 'submissions.file', 'submissions.created_at as uploaded_at')
+            ->select('assignments.*', 'submissions.submission_id as submission_id', 'submissions.file', 'submissions.submission_time as uploaded_at')
             ->get();
+
+        $assignment = $assignment->map(function ($item) {
+            $item->uploaded_at = $item->uploaded_at ? date('d-m-Y H:i:s', strtotime($item->uploaded_at)) : null;
+            if ($item->submission_id) {
+                $item->isLate = strtotime($item->deadline) < strtotime($item->uploaded_at) ? true : false;
+            } else {
+                $item->isLate = null;
+            }
+            return $item;
+        });
         $data = [
             'data' => $assignment,
             'course_id' => $id
@@ -62,7 +72,7 @@ class MahasiswaController extends BaseController
         if ($file) {
             $destination = public_path() . 'files/tugas';
             // dd($destination);
-            $allowedExt = ['jpg', 'jpeg', 'png', 'pdf'];
+            $allowedExt = ['jpg', 'jpeg', 'png', 'pdf', 'docx', 'doc', 'zip'];
             $validate = fileHandler()->validateUpload('file', $allowedExt);
             if ($validate) {
                 $fileName = time() . '_' . $file->filename;
@@ -71,7 +81,6 @@ class MahasiswaController extends BaseController
                     respons()->setStatusCode(400)->json(['error' => 'failed upload']);
                 }
             }
-            var_dump($id);
             $data = Submission::updateOrCreate([
                 'user_id' => session()->get('user')->user_id,
                 'assignment_id' => $id
